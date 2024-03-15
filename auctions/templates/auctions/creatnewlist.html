@@ -1,0 +1,46 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <form action="{% url 'creatnewlist' %}" method="post">
+        {% csrf_token %}
+        <ul class="list-none">
+            <li>
+                <div class="">
+                    <label for="title">title</label>
+                    <input type="text" name="title" id="title" required>        
+                </div>
+            </li>
+            <li>
+                <div class="">
+                    <label for="description">description</label>
+                    <input type="text" name="description" id="description" required>        
+                </div>
+            </li>
+            <li>
+                <div class="">
+                    <label for="ImageUrl">ImageUrl</label>
+                    <input type="text" name="ImageUrl" id="ImageUrl" required>        
+                </div>
+            </li>
+            <li>
+                <div class="">
+                    <label for="starting bid">starting bid</label>
+                    <input type="number" name="starting_bid" id="starting_bid" required>        
+                </div>
+            </li>
+            <li>
+                <div class="">
+                    <label for="category"> select a category</label>
+                    <select  id="category" name="category">
+                        {% for catg in all_catagoreys %}
+                        <option value="{{catg.catogory_name}}">
+                            {{catg.catogory_name}}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </li>
+        </ul>
+        <button type="submit">submit</button>
+    </form>
+{% endblock %}
