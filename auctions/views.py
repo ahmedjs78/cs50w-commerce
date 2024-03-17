@@ -65,7 +65,10 @@ def register(request):
 
 def creat_new_list(request):
     if request.method == 'POST':
-        #get the data from creat lising page
+        current_user = request.user
+        print(f"{current_user}")
+        user_instance = User.objects.get(username= current_user)
+        # get the data from creat lising page
         list_titleq = request.POST.get('title')
         list_descriptionq = request.POST.get('description')
         list_imageq = request.POST.get('ImageUrl')
@@ -81,10 +84,16 @@ def creat_new_list(request):
             list_starting_bid=list_starting_bidq,
             list_image=list_imageq,
             list_catagpry=categpry_instance,
-            list_active=True
+            list_active=True,
+            list_owner=user_instance
         )
         new_Listing.save()
         return render(request, "auctions/index.html")
     else:
         all_catagoreys = Category.objects.all()
         return render(request, "auctions/creatnewlist.html",{'all_catagoreys':all_catagoreys})
+    
+
+def view_item(request,pk):
+    current_list = Listings.objects.filter(pk=pk)
+    return render(request, "auctions/view_item.html", {"current_list":current_list})

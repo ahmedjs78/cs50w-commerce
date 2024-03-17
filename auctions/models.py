@@ -20,6 +20,8 @@ class Listings(models.Model):
     list_image = models.CharField(max_length=1000)
     list_catagpry = models.ForeignKey(Category , on_delete=models.CASCADE)
     list_active = models.BooleanField(True)
+    list_owner = models.ForeignKey(User , on_delete=models.CASCADE)
+    list_watch_list = models.ManyToManyField(User , default=set)
 
     def __str__(self):
         return self.list_title

@@ -1,0 +1,13 @@
+{% extends "auctions/layout.html" %}
+
+
+
+{% block body %}
+{% for l in current_list%}
+<div class="card">
+    <h1>
+        {{l.list_title}}
+    </h1>
+</div>
+{% endfor%}
+{% endblock%}
