@@ -92,7 +92,21 @@ def creat_new_list(request):
     else:
         all_catagoreys = Category.objects.all()
         return render(request, "auctions/creatnewlist.html",{'all_catagoreys':all_catagoreys})
-    
+    # add the method to make the user save watch list based on the user name 
+def addToWatchList(request):
+    if request.method == 'POST':
+        curentuser = request.user
+        pk = request.POST.get('num')
+        listInstanse = Listings.objects.get(pk=pk)
+        listInstanse.list_watch_list.add(curentuser)
+    return render(request, "auctions/view_item.html")
+#work on remove method 
+def removeFromWatchList(request):
+    currentuser = request.user
+    pk = request.POST.get('num')
+    list_instance = Listings.objects.get(pk=pk)
+    list_instance.list_watch_list.remove(currentuser)
+    return render(request, "auctions/view_item.html")
 
 def view_item(request,pk):
     current_list = Listings.objects.filter(pk=pk)
