@@ -12,6 +12,10 @@ class Category(models.Model):
     def __str__(self):
         return self.catogory_name
 
+class Bid(models.Model):
+    user_name = models.ForeignKey(User, on_delete=models.CASCADE,default=None)
+    bidamount = models.FloatField()
+    onList = models.ForeignKey('Listings', on_delete=models.CASCADE,default=None)
 
 class Listings(models.Model):
     list_title = models.CharField(max_length=30)
@@ -22,6 +26,6 @@ class Listings(models.Model):
     list_active = models.BooleanField(True)
     list_owner = models.ForeignKey(User , on_delete=models.CASCADE,default=1)
     list_watch_list = models.ManyToManyField(User , related_name='watchlist_listings')
-
+    
     def __str__(self):
         return self.list_title

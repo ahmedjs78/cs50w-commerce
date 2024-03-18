@@ -25,6 +25,15 @@
     </form>
     
     {% endif %}
+
+    {% if user.is_authenticated  %}
+    <form action="{% url 'add_bid'%}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="pk" id="pk" value="{{l.pk}}">
+        <input type="number" name="bid_amount" placeholder="add bid">
+        <button type="submit">Add bid</button>
+    </form>
+    {% endif %}
     <!-- work on remove itme from watch list method -->
 
 </div>

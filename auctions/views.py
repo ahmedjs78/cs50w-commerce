@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User,Listings, Category
+from .models import User,Listings, Category,Bid
 
 
 def index(request):
@@ -111,3 +111,19 @@ def removeFromWatchList(request):
 def view_item(request,pk):
     current_list = Listings.objects.filter(pk=pk)
     return render(request, "auctions/view_item.html", {"current_list":current_list})
+
+
+
+def addBid(request):
+    currentUser = request.user
+    pk = request.POST.get('pk')
+    list_instance = Listings.objects.get(pk=pk)
+    bid = request.POST.get('bid_amount')
+    newbid = Bid(
+        user_name=currentUser,
+        onList=list_instance,
+        bidamount=bid
+    )
+    newbid.save()
+
+    return render(request, "auctions/index.html")
