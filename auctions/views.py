@@ -1,10 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render ,redirect
 from django.urls import reverse
-
+from django.db.models import Max
 from .models import User,Listings, Category,Bid
+
 
 
 def index(request):
@@ -99,18 +100,22 @@ def addToWatchList(request):
         pk = request.POST.get('num')
         listInstanse = Listings.objects.get(pk=pk)
         listInstanse.list_watch_list.add(curentuser)
-    return render(request, "auctions/view_item.html")
+    return redirect(reverse('viewitem', kwargs={'pk': pk}))
 #work on remove method 
 def removeFromWatchList(request):
     currentuser = request.user
     pk = request.POST.get('num')
+    print(f"{pk}")
     list_instance = Listings.objects.get(pk=pk)
     list_instance.list_watch_list.remove(currentuser)
-    return render(request, "auctions/view_item.html")
+    return redirect(reverse('viewitem', kwargs={'pk': pk}))
 
 def view_item(request,pk):
-    current_list = Listings.objects.filter(pk=pk)
-    return render(request, "auctions/view_item.html", {"current_list":current_list})
+    current_list = Listings.objects.get(pk=pk)
+    bidOnThisList = Bid.objects.filter(onList=current_list)
+    maxe = bidOnThisList.aggregate(b=Max('bidamount'))['b']
+    print(f"{maxe}")
+    return render(request, "auctions/view_item.html", {"current_list":current_list,'maxe':maxe})
 
 
 

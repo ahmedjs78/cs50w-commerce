@@ -3,24 +3,38 @@
 
 
 {% block body %}
-{% for l in current_list%}
-<div class="card">
-    <h1>
-        {{l.list_title}}
-    </h1>
 
-    {% if  user in l.list_watch_list.all %}
+
+
+
+
+
+<div class="card">
+    <div>
+        <h1>
+            {{current_list.list_title}}
+        </h1>
+        <p>
+            {{current_list.list_description}}
+        </p>
+        <p>the haighest bid 
+            {{maxe}}</p>
+    </div>
+
+    {% if  user in current_list.list_watch_list.all %}
 
     <form action="{% url 'removethelist' %}" method="POST">
         {% csrf_token %}
-        <input type="hidden" name="num" value="{{l.pk}}">
+
+        <input type="hidden" name="num" value="{{current_list.pk}}">
         <button type="submit">remove from Watch list</button>
     </form>
     {% else%}
     
     <form action="{% url 'addToWatchList' %}" method="POST">
         {% csrf_token %}
-        <input type="hidden" name="num" value="{{l.pk}}">
+        {{current_list.pk}}
+        <input type="hidden" name="num" value="{{current_list.pk}}">
         <button type="submit">Add to Watch list</button>
     </form>
     
@@ -29,7 +43,7 @@
     {% if user.is_authenticated  %}
     <form action="{% url 'add_bid'%}" method="POST">
         {% csrf_token %}
-        <input type="hidden" name="pk" id="pk" value="{{l.pk}}">
+        <input type="hidden" name="pk" id="pk" value="{{current_list.pk}}">
         <input type="number" name="bid_amount" placeholder="add bid">
         <button type="submit">Add bid</button>
     </form>
@@ -37,5 +51,5 @@
     <!-- work on remove itme from watch list method -->
 
 </div>
-{% endfor%}
+
 {% endblock%}
