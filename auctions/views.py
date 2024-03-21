@@ -5,6 +5,8 @@ from django.shortcuts import render ,redirect
 from django.urls import reverse
 from django.db.models import Max
 from .models import User,Listings, Category,Bid
+from django.utils import timezone 
+
 
 
 
@@ -89,7 +91,7 @@ def creat_new_list(request):
             list_owner=user_instance
         )
         new_Listing.save()
-        return render(request, "auctions/index.html")
+        return redirect(reverse('index'))
     else:
         all_catagoreys = Category.objects.all()
         return render(request, "auctions/creatnewlist.html",{'all_catagoreys':all_catagoreys})
@@ -111,24 +113,42 @@ def removeFromWatchList(request):
     return redirect(reverse('viewitem', kwargs={'pk': pk}))
 
 def view_item(request,pk):
+    error = request.GET.get('error')
     current_list = Listings.objects.get(pk=pk)
     bidOnThisList = Bid.objects.filter(onList=current_list)
     maxe = bidOnThisList.aggregate(b=Max('bidamount'))['b']
-    print(f"{maxe}")
-    return render(request, "auctions/view_item.html", {"current_list":current_list,'maxe':maxe})
+    returnuser = Bid.objects.get(bidamount=maxe)
+    
+    return render(request, "auctions/view_item.html", {"current_list":current_list,'maxe':maxe,'error':error,'returnuser':returnuser})
 
 
 
 def addBid(request):
     currentUser = request.user
+    
     pk = request.POST.get('pk')
     list_instance = Listings.objects.get(pk=pk)
+    allbids = Bid.objects.filter(onList=list_instance)
     bid = request.POST.get('bid_amount')
-    newbid = Bid(
-        user_name=currentUser,
-        onList=list_instance,
-        bidamount=bid
-    )
-    newbid.save()
-
-    return redirect(reverse('viewitem', kwargs={'pk': pk}))
+    x = int(bid)
+    maxee = allbids.aggregate(b=Max('bidamount'))['b']
+    print(f"{x}")
+    if maxee > x :
+        error = True
+        return redirect(reverse('viewitem', kwargs={'pk': pk})+ f'?error={error}')
+    else:
+        newbid = Bid(
+            user_name=currentUser,
+            onList=list_instance,
+            bidamount=bid
+        )
+        newbid.save()
+        return redirect(reverse('viewitem', kwargs={'pk': pk}))
+    
+def closeList(request):
+     pk = request.POST.get('num')
+     print(f"{pk}")
+     list_instance = Listings.objects.get(pk=pk)
+     list_instance.list_active = False
+     list_instance.save()
+     return redirect(reverse('viewitem', kwargs={'pk': pk}))
