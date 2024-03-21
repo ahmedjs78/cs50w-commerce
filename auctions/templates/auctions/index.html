@@ -10,8 +10,8 @@
             <img src="{{list.list_image}}" class="card-img-top" alt="...">
             <div class="card-body">
               <h5 class="card-title">{{list.list_title}}</h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              <a href="{% url 'viewitem' pk=list.pk %}" class="btn btn-primary">view that item</a>
+              <p class="card-text mb-[10px]">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <a href="{% url 'viewitem' pk=list.pk %}" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">view that item</a>
             </div>
           </div>
           {% endfor %}

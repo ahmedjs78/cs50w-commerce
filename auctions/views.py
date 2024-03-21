@@ -131,4 +131,4 @@ def addBid(request):
     )
     newbid.save()
 
-    return render(request, "auctions/index.html")
+    return redirect(reverse('viewitem', kwargs={'pk': pk}))
