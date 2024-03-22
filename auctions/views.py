@@ -12,7 +12,8 @@ from django.utils import timezone
 
 def index(request):
     all_active_lists = Listings.objects.filter(list_active=True)
-    return render(request, "auctions/index.html",{'all_active_lists':all_active_lists})
+    all_closed_lists = Listings.objects.filter(list_active=False)
+    return render(request, "auctions/index.html",{'all_active_lists':all_active_lists,'all_closed_lists':all_closed_lists})
 
 
 def login_view(request):

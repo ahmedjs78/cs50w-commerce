@@ -4,9 +4,10 @@
     <h2>Active Listings</h2>
 
     TODO
-    <div class="main d-flex flex-row  flex-gapc " style="gap:10px;">
-        {% for list in all_active_lists %}
-        <div class="card" style="width: 18rem;">
+    <div class="main " style="gap:10px;">
+        <div class="open_auctions flex">
+          {% for list in all_active_lists %}
+          <div class="card" style="width: 18rem;">
             <img src="{{list.list_image}}" class="card-img-top" alt="...">
             <div class="card-body">
               <h5 class="card-title">{{list.list_title}}</h5>
@@ -15,5 +16,23 @@
             </div>
           </div>
           {% endfor %}
+        </div>
+        <div class="Closed_actions block
+        ">
+
+          <h1>
+            Closed lists
+          </h1>
+          {% for closed in all_closed_lists %}
+          <div class="card" style="width: 18rem;">
+            <img src="{{closed.list_image}}" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">{{closed.list_title}}</h5>
+              <p class="card-text mb-[10px]">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <a href="{% url 'viewitem' pk=closed.pk %}" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">view that item</a>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
     </div>
 {% endblock %}

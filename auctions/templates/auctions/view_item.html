@@ -4,67 +4,75 @@
 
 {% block body %}
 
+<div class="flex gap-[40px]  items-center justify-center">
+        <!-- img and add remove method -->
+        <div class="relative  w-[30%]">
+            <img src="{{current_list.list_image}}" class="card-img-top w-[100%] " alt="...">
 
-
-<div class="card w-[25%] p-[10px] ">
-    <div class="card-body">
-        <h5 class="card-title font-['Rubik'] font-[700]">{{current_list.list_title}}</h5>
-        <div class="add-remove-fromWatchList">
-
-            {% if current_list.list_owner|striptags == user.username|striptags %}
-            <form action="{% url 'closeList' %}" method="POST" >
-                {% csrf_token %}
-                <input type="hidden" name="num" value="{{current_list.pk}}">
-                <button type="submit">Close List</button>
-            </form>
-            {%endif%}
-            
-            {% if  user in current_list.list_watch_list.all %}
-            <form action="{% url 'removethelist' %}" method="POST">
-                {% csrf_token %}
+            <div class="absolute top-[20px] add-remove-fromWatchList">
+                {% if user.is_authenticated %}
+                    {% if current_list.list_owner|striptags == user.username|striptags %}
+                    <form action="{% url 'closeList' %}" method="POST" >
+                        {% csrf_token %}
+                        <input type="hidden" name="num" value="{{current_list.pk}}">
+                        <button type="submit">Close List</button>
+                    </form>
+                    {%endif%}
                 
-                <input type="hidden" name="num" value="{{current_list.pk}}">
-                <button class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" type="submit">remove from Watch list</button>
-            </form>
-            {% else%}
-            <form action="{% url 'addToWatchList' %}" method="POST">
-                {% csrf_token %}
-                <input type="hidden" name="num" value="{{current_list.pk}}">
-                <button class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" type="submit">Add to Watch list</button>
-            </form>
-            {% endif %}
+                    {% if  user in current_list.list_watch_list.all %}
+                    <form action="{% url 'removethelist' %}" method="POST">
+                        {% csrf_token %}
+                        
+                        <input type="hidden" name="num" value="{{current_list.pk}}">
+                        <button class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" type="submit">remove from Watch list</button>
+                    </form>
+                    {% else%}
+                    <form action="{% url 'addToWatchList' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="num" value="{{current_list.pk}}">
+                        <button class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" type="submit">Add to Watch list</button>
+                    </form>
+                    {% endif %}
+                {%endif%}
+            </div>
         </div>
-        <img src="{{current_list.list_image}}" class="card-img-top w-[100%] " alt="...">
-        <div class="border-[1px]">
-            <p class="card-text">{{current_list.list_description}}</p>
+        <!-- end  img and add remove method -->
+        <div class="card w-[25%] p-[10px] ">
+     
+            <div class="card-body">
+                <h5 class="card-title font-['Rubik'] font-[700]">{{current_list.list_title}}</h5>
+                
+                <div class="border-[1px]">
+                    <p class="card-text">{{current_list.list_description}}</p>
+                </div>
+                <div class="card-bid">
+                    <p class="card-title">the haighest bid {{maxe}}
+                        to the  user {{returnuser.user_name}}
+                    </p>
+                    {% if user.is_authenticated  %}
+                    <form action="{% url 'add_bid'%}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="pk" id="pk" value="{{current_list.pk}}">
+                        <input type="number" name="bid_amount" placeholder="add bid">
+                        <button type="submit">Add bid</button>
+                        {% if error %}
+                        <p>your bid should be haigher then the current bid</p>
+                        {% else%}
+                        
+                        {% endif %}
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="card-footer">
+                <small class="text-body-secondary"> Listed at {{ current_list.date_time|date:"Y-m-d H:i:s"}}</small>
+            </div>
         </div>
-      <div class="card-bid">
-            <p class="card-title">the haighest bid {{maxe}}
-                to the  user {{returnuser.user_name}}
-            </p>
-            {% if user.is_authenticated  %}
-            <form action="{% url 'add_bid'%}" method="POST">
-                {% csrf_token %}
-                <input type="hidden" name="pk" id="pk" value="{{current_list.pk}}">
-                <input type="number" name="bid_amount" placeholder="add bid">
-                <button type="submit">Add bid</button>
-                {% if error %}
-                <p>your bid should be haigher then the current bid</p>
-                {% else%}
-
-                {% endif %}
-            </form>
-            {% endif %}
-      </div>
-    </div>
-   
-    <div class="card-footer">
-      <small class="text-body-secondary"> Listed at {{ current_list.date_time|date:"Y-m-d H:i:s"}}</small>
-    </div>
-  </div>
-
-
-
-
-
-{% endblock%}
+        
+        
+        
+        
+</div>
+        
+        {% endblock%}
