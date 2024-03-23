@@ -11,9 +11,16 @@ from django.utils import timezone
 
 
 def index(request):
-    all_active_lists = Listings.objects.filter(list_active=True)
-    all_closed_lists = Listings.objects.filter(list_active=False)
-    return render(request, "auctions/index.html",{'all_active_lists':all_active_lists,'all_closed_lists':all_closed_lists})
+    if request.method == 'POST':
+        user_catagorey_choise = request.POST.get('catagory')
+        returnToPage = Category.objects.get(catogory_name=user_catagorey_choise)
+        all_active_lists = Listings.objects.filter(list_catagpry=returnToPage,list_active=True)
+        all_closed_lists = Listings.objects.filter(list_catagpry=returnToPage,list_active=False)
+        return render(request, "auctions/index.html",{'all_active_lists':all_active_lists,'all_closed_lists':all_closed_lists})
+    else:
+        all_active_lists = Listings.objects.filter(list_active=True)
+        all_closed_lists = Listings.objects.filter(list_active=False)
+        return render(request, "auctions/index.html",{'all_active_lists':all_active_lists,'all_closed_lists':all_closed_lists})
 
 
 def login_view(request):

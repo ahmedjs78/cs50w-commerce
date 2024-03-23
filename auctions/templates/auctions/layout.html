@@ -41,6 +41,18 @@
                 <a class="nav-link" href="{% url 'register' %}">Register</a>
             </li>
             {% endif %}
+            <li>
+                <form class="nav-link" action="{% url 'index'%}" method="post">
+                    {% csrf_token %}
+                    <select name="catagory" id="catagory">
+                        <option disabled selected>Select Catagoey</option>
+                        {% for options in all_catagores%}
+                        <option value="{{options}}">{{options}}</option>
+                        {% endfor%}
+                    </select>
+                    <button class="submit">Go to</button>
+                </form>
+            </li>
           </ul>
 
 
