@@ -4,8 +4,9 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render ,redirect
 from django.urls import reverse
 from django.db.models import Max
-from .models import User,Listings, Category,Bid
+from .models import User,Listings, Category,Bid, Commint
 from django.utils import timezone 
+from django.core.exceptions import ObjectDoesNotExist
 
 
 
@@ -124,10 +125,16 @@ def view_item(request,pk):
     error = request.GET.get('error')
     current_list = Listings.objects.get(pk=pk)
     bidOnThisList = Bid.objects.filter(onList=current_list)
+    # If maxe is not empty, calculate the max bid amount and retrieve the corresponding user
     maxe = bidOnThisList.aggregate(b=Max('bidamount'))['b']
-    returnuser = Bid.objects.get(bidamount=maxe)
-    
-    return render(request, "auctions/view_item.html", {"current_list":current_list,'maxe':maxe,'error':error,'returnuser':returnuser})
+    try:
+        returnuser = Bid.objects.get(bidamount=maxe)
+    except ObjectDoesNotExist:
+        returnuser = None
+        return render(request, "auctions/view_item.html", {"current_list": current_list, 'maxe': maxe, 'error': error})
+    else:
+        return render(request, "auctions/view_item.html", {"current_list": current_list, 'maxe': maxe, 'returnuser': returnuser, 'error': error})
+
 
 
 
@@ -139,19 +146,21 @@ def addBid(request):
     allbids = Bid.objects.filter(onList=list_instance)
     bid = request.POST.get('bid_amount')
     x = int(bid)
-    maxee = allbids.aggregate(b=Max('bidamount'))['b']
-    print(f"{x}")
-    if maxee > x :
-        error = True
-        return redirect(reverse('viewitem', kwargs={'pk': pk})+ f'?error={error}')
-    else:
-        newbid = Bid(
-            user_name=currentUser,
-            onList=list_instance,
-            bidamount=bid
-        )
-        newbid.save()
-        return redirect(reverse('viewitem', kwargs={'pk': pk}))
+    try:
+        maxee = allbids.aggregate(b=Max('bidamount'))['b']
+        if maxee is not None and maxee > x:
+            error = True
+            return redirect(reverse('viewitem', kwargs={'pk': pk}) + f'?error={error}')
+    except Bid.DoesNotExist:
+        pass
+
+    newbid = Bid(
+        user_name=currentUser,
+        onList=list_instance,
+        bidamount=bid
+    )
+    newbid.save()
+    return redirect(reverse('viewitem', kwargs={'pk': pk}))
     
 def closeList(request):
      pk = request.POST.get('num')
@@ -160,3 +169,18 @@ def closeList(request):
      list_instance.list_active = False
      list_instance.save()
      return redirect(reverse('viewitem', kwargs={'pk': pk}))
+
+
+# def commint(request):
+#     user_commint = request.POST.get('commint')
+#     current_user = request.user
+#     listpk = request.POST.get('listpk')
+#     list_instance = Listings.objects.get(pk=listpk)
+    
+#     forsave =  Commint(user_commint_balue=user_commint,
+#                        user_commint_onList = list_instance,
+#                        user_on_commint = current_user)
+    
+#     forsave.save()
+
+#     return redirect(reverse('viewitem', kwargs={'pk': listpk}))
