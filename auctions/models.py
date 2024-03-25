@@ -22,6 +22,7 @@ class Commint(models.Model):
     user_commint_balue = models.TextField( max_length=200)
     user_commint_onList = models.ForeignKey('Listings',on_delete=models.CASCADE,default=None)
 
+
 class Listings(models.Model):
     list_title = models.CharField(max_length=30)
     list_description = models.CharField(max_length=300)

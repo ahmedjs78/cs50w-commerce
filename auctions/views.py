@@ -135,7 +135,10 @@ def view_item(request,pk):
     else:
         return render(request, "auctions/view_item.html", {"current_list": current_list, 'maxe': maxe, 'returnuser': returnuser, 'error': error})
 
-
+def watchList(request):
+    user = request.user
+    lists_in_user_wathc_List = Listings.objects.filter(list_watch_list=user)
+    return render(request,"auctions/watch_list.html",{'lists_in_user_wathc_List':lists_in_user_wathc_List})
 
 
 def addBid(request):
@@ -171,16 +174,16 @@ def closeList(request):
      return redirect(reverse('viewitem', kwargs={'pk': pk}))
 
 
-# def commint(request):
-#     user_commint = request.POST.get('commint')
-#     current_user = request.user
-#     listpk = request.POST.get('listpk')
-#     list_instance = Listings.objects.get(pk=listpk)
+def commint(request):
+    user_commint = request.POST.get('commint')
+    listpk = request.POST.get('listpk')
+    current_user = request.user
+    list_instance = Listings.objects.get(pk=listpk)
     
-#     forsave =  Commint(user_commint_balue=user_commint,
-#                        user_commint_onList = list_instance,
-#                        user_on_commint = current_user)
+    forsave =  Commint(user_commint_balue=user_commint,
+                       user_commint_onList = list_instance,
+                       user_on_commint = current_user)
     
-#     forsave.save()
+    forsave.save()
 
-#     return redirect(reverse('viewitem', kwargs={'pk': listpk}))
+    return redirect(reverse('viewitem', kwargs={'pk': listpk}))
