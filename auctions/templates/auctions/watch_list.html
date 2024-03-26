@@ -1,21 +1,23 @@
+{% extends "auctions/layout.html" %}
 
-{% for l in lists_in_user_wathc_List %}
+{% block body %}
+<div class=" flex flex-row gap-[20px]">
 
-
-<div class="border-[2px] ">
-
-    <div class=" w-[25%] p-[10px] ">
-        <div class="card-body">
-            <div class="mb-[40px]">
-                <h1 class="text-[24px] font-[700]">{{l.list_title}}</h1>
-                <p class="m-[0px] italic font-[700] text-[#717171]">small info about the item</p>
+    {% for l in lists_in_user_wathc_List %}
+        <div class=" border-[2px] bg-red-200 border-[#000]">
+            <div class=" w-[100%] p-[10px] ">
+                <div class="card-body">
+                    
+                    <div class="mb-[40px]">
+                        <h1 class="text-[24px] font-[700]">{{l.list_title}}</h1>
+                        <p class="m-[0px] italic font-[700] text-[#717171]">small info about the item</p>
+                    </div>
+                    <div class="mb-[40px]">
+                        <p class="card-text text-[gray]">{{l.list_description}}</p>
+                    </div>
+                </div>
             </div>
-            <div class="mb-[40px]">
-                <p class="card-text text-[gray]">{{l.list_description}}</p>
-            </div>
-            
         </div>
-    </div>
-    
+    {% endfor%}
 </div>
-{% endfor%}
+{% endblock %}

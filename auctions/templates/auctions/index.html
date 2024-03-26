@@ -2,8 +2,6 @@
 
 {% block body %}
     <h2>Active Listings</h2>
-
-    TODO
     <div class="main " style="gap:10px;">
         <div class="open_auctions flex gap-[30px]">
           {% for list in all_active_lists %}
@@ -21,18 +19,20 @@
         ">
 
           <h1>
-            Closed lists
+            Closed Listings
           </h1>
-          {% for closed in all_closed_lists %}
-          <div class="card" style="width: 18rem;">
-            <img src="{{closed.list_image}}" class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title">{{closed.list_title}}</h5>
-              <p class="card-text mb-[10px]">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              <a href="{% url 'viewitem' pk=closed.pk %}" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">view that item</a>
+          <div class="flex flex-row gap-[25px]">
+            {% for closed in all_closed_lists %}
+            <div class="card" style="width: 18rem;">
+              <img src="{{closed.list_image}}" class="card-img-top" alt="...">
+              <div class="card-body">
+                <h5 class="card-title">{{closed.list_title}}</h5>
+                <p class="card-text mb-[10px]">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <a href="{% url 'viewitem' pk=closed.pk %}" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">view that item</a>
+              </div>
             </div>
+            {% endfor %}
           </div>
-          {% endfor %}
         </div>
     </div>
 {% endblock %}
