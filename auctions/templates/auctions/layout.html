@@ -14,12 +14,8 @@
         
     </head>
     <body class="font-['Comic Neue']">
-        <div class="flex flex-row">
-            
-            <div class="w-[20%] bg-[#000] h-[100%]">
-                
-            </div>
-            <div>
+        <div class="px-[300px]">
+           
             <h1 class="text-[40px] mb-[10px]">Auctions</h1>
             <div>
                 {% if user.is_authenticated %}
@@ -70,8 +66,7 @@
             {% block body %}
             {% endblock %}
 
-            </div>
-            <div class="w-[20%] bg-[#000] h-[100%]"></div>
+            
         </div>
         </body>
         </html>
