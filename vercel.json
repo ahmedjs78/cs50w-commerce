@@ -3,7 +3,7 @@
 
     "builds": [{
 
-        "src": "auctions/wsgi.py",
+        "src": "commerce/wsgi.py",
 
         "use": "@vercel/python",
 
@@ -17,7 +17,7 @@
 
             "src": "/(.*)",
 
-            "dest": "auctions/wsgi.py"
+            "dest": "commerce/wsgi.py"
 
         }
 
