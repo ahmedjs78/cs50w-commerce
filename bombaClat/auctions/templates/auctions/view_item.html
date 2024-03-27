@@ -1,0 +1,122 @@
+{% extends "auctions/layout.html" %}
+
+
+
+{% block body %}
+
+<div class="flex">
+    <div class="w-[100%]">
+
+        <div class="flex gap-[40px]  items-center justify-center">
+            <!-- img and add remove method -->
+            <div class="relative  w-[30%]">
+                <img src="{{current_list.list_image}}" class="card-img-top w-[1000px] " alt="...">
+                
+                <div class="absolute top-[20px] add-remove-fromWatchList">
+                    {% if user.is_authenticated %}
+                    {% if current_list.list_owner|striptags == user.username|striptags %}
+                    {% if current_list.list_active ==  True %}
+                    <form action="{% url 'closeList' %}" method="POST" >
+                        {% csrf_token %}
+                        <input type="hidden" name="num" value="{{current_list.pk}}">
+                        <button type="submit">Close List</button>
+                    </form>
+                    {% else %}
+                    <div>
+                        the winner is {{returnuser.user_name}} 
+                        with the haiest bid  {{maxe}}
+                        
+                        <p></p>
+                        <h1>Action is closed </h1>
+                    </div>
+                    {% endif %}
+                    {%endif%}
+                    
+                    {% if  user in current_list.list_watch_list.all %}
+                    <form action="{% url 'removethelist' %}" method="POST">
+                        {% csrf_token %}
+                        
+                        <input type="hidden" name="num" value="{{current_list.pk}}">
+                        <button class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" type="submit">remove from Watch list</button>
+                    </form>
+                    {% else%}
+                    <form action="{% url 'addToWatchList' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="num" value="{{current_list.pk}}">
+                        <button class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" type="submit">Add to Watch list</button>
+                    </form>
+                    {% endif %}
+                    {%endif%}
+                </div>
+            </div>
+            <!-- end  img and add remove method -->
+            <div class=" w-[25%] p-[10px] ">
+                <div class="card-body">
+                    <div class="mb-[40px]">
+                        <h1 class="text-[24px] font-[700]">{{current_list.list_title}}</h1>
+                        <p class="m-[0px] italic font-[700] text-[#717171]">small info about the item</p>
+                    </div>
+                    <div class="mb-[40px]">
+                        <p class="card-text text-[gray]">{{current_list.list_description}}</p>
+                    </div>
+                    <div class="card-bid">
+                        <div class="bg-gray-500 mb-[10px] h-[1px] w-[100%]"></div>
+                        <div class="">
+                            <h3>current bid</h3>
+                            <p class="card-title">{{maxe}} to the  user {{returnuser.user_name}}
+                            </p>
+                        </div>
+                        <div class="bg-gray-500 mb-[20px] h-[1px] w-[100%]"></div>
+                        {% if user.is_authenticated %}
+                        <div class="mb-[10px]">
+                            <form action="{% url 'add_bid'%}" method="POST">
+                                {% csrf_token %}
+                                <div class="flex flex-col gap-[15px]">
+                                    <input type="hidden" name="pk" id="pk" value="{{current_list.pk}}">
+                                    <h2 class="text-[24px] font-[900] ">Place bid</h2>
+                                    <input class="border-[2px] px-[15px] border-[#000]" type="number" name="bid_amount" placeholder="$">
+                                    <button class="bg-[#000] py-[5px] rounded-[30px] text-[white] " type="submit">bid</button>
+                                    {% if error %}
+                                    <p>your bid should be haigher then the current bid</p>
+                                </div>
+                                {% else%}
+                                
+                                {% endif %}
+                                
+                            </form>
+                        </div>
+                        
+                        {% endif %}
+                    </div>
+                </div>
+                <div class=" text-center">
+                    <small class=" font-[700] text-[16px]"> Listed at {{ current_list.date_time|date:"Y-m-d H:i:s"}}</small>
+                </div>
+                <div class="h-[2px] bg-red-500 rounded mt-[20px]"></div>
+                
+            </div>
+            
+        </div>
+    </div>
+    <div class="flex justify-center">
+
+        <div class="flex flex-col flex-wrap  gap-[220px] w-[33%] ">
+            {% for commint in data_commints %}
+                <div>
+                    <h1>user_name</h1>
+                    <p>commint_ content</p>
+                </div>
+            {%endfor%}
+        </div>
+        <div class="  block">
+            <form action="{% url 'commint' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="listpk" value="{{current_list.pk}}">
+                <textarea class=" mb-[10px] w-[100%] h-[30%] font-[500] box-border p-[10px] resize-none border-[1px] border-[#000]" name="commint" id="commint" cols="30" rows="5" placeholder="commint"></textarea>
+                <button class=" p-[5px] block rounded-[18px] bg-black text-center w-[100%] text-[white]">commint</button>
+            </form>
+        </div>
+    </div>
+        
+    </div>
+    {% endblock%}

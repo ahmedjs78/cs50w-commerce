@@ -1,0 +1,8 @@
+body {
+  font-family: 'Comic Neue' !important;
+  padding: 10px;
+}
+
+.flex-gapc{
+  gap:5px;
+}
